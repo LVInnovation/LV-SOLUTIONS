@@ -1,5 +1,5 @@
 import { ArrowLeft, Edit3, Save, Trash2 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import BrandMark from '../components/BrandMark'
 import ConfirmDialog from '../components/admin/ConfirmDialog'
@@ -12,62 +12,124 @@ import {
 } from '../services/projectRepository'
 import type { Project } from '../types/project'
 
-function getInitialDetailsState(id?: string) {
-  if (id === 'novo') {
-    return {
-      project: createBlankProject(),
-      isEditing: true,
-      isMissing: false,
-    }
-  }
-
-  const existingProject = id ? getProjectById(id) : null
-
-  return {
-    project: existingProject ?? createBlankProject(),
-    isEditing: false,
-    isMissing: !existingProject,
-  }
-}
-
 export default function ProjectDetails() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const initialState = getInitialDetailsState(id)
-  const [project, setProject] = useState<Project>(() => initialState.project)
-  const [isEditing, setIsEditing] = useState(initialState.isEditing)
+  const [project, setProject] = useState<Project>(() => createBlankProject())
+  const [isEditing, setIsEditing] = useState(id === 'novo')
+  const [isLoading, setIsLoading] = useState(id !== 'novo')
+  const [isMissing, setIsMissing] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [feedback, setFeedback] = useState('')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const isNew = id === 'novo'
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadProject(projectId: string) {
+      setIsLoading(true)
+      const existingProject = await getProjectById(projectId)
+
+      if (!isMounted) {
+        return
+      }
+
+      setIsMissing(!existingProject)
+      setProject(existingProject ?? createBlankProject())
+      setIsEditing(false)
+      setIsLoading(false)
+    }
+
+    function loadNewProject() {
+      setProject(createBlankProject())
+      setIsEditing(true)
+      setIsMissing(false)
+      setIsLoading(false)
+    }
+
+    function loadMissingProject() {
+      setIsMissing(true)
+      setIsLoading(false)
+    }
+
+    if (id === 'novo') {
+      loadNewProject()
+    } else if (id) {
+      loadProject(id).catch(() => {
+        if (isMounted) {
+          setIsMissing(true)
+          setIsLoading(false)
+        }
+      })
+    } else {
+      loadMissingProject()
+    }
+
+    return () => {
+      isMounted = false
+    }
+  }, [id])
 
   function flashFeedback(message: string) {
     setFeedback(message)
     window.setTimeout(() => setFeedback(''), 2200)
   }
 
-  function handleSave() {
+  async function handleSave() {
     if (!project.projectName.trim()) {
       window.alert('Informe o nome do projeto antes de salvar.')
       return
     }
 
-    const savedProject = saveProject(project)
-    setProject(savedProject)
-    setIsEditing(false)
-    flashFeedback('Projeto salvo com sucesso.')
+    setIsSaving(true)
 
-    if (isNew) {
-      navigate(`/admin/projetos/${savedProject.id}`, { replace: true })
+    try {
+      const savedProject = await saveProject(project)
+      setProject(savedProject)
+      setIsEditing(false)
+      flashFeedback('Projeto salvo com sucesso.')
+
+      if (isNew) {
+        navigate(`/admin/projetos/${savedProject.id}`, { replace: true })
+      }
+    } catch {
+      window.alert('Não foi possível salvar o projeto.')
+    } finally {
+      setIsSaving(false)
     }
   }
 
-  function handleDelete() {
-    deleteProject(project.id)
-    setDeleteDialogOpen(false)
-    navigate('/admin')
+  async function handleDelete() {
+    setIsDeleting(true)
+
+    try {
+      await deleteProject(project.id)
+      setDeleteDialogOpen(false)
+      navigate('/admin')
+    } catch {
+      window.alert('Não foi possível excluir o projeto.')
+    } finally {
+      setIsDeleting(false)
+    }
   }
 
-  if (initialState.isMissing) {
+  if (isLoading) {
+    return (
+      <div className="page-shell">
+        <main className="section-shell grid min-h-screen place-items-center py-10">
+          <div className="glass-panel max-w-md rounded-lg p-8 text-center">
+            <h1 className="text-2xl font-bold text-white">
+              Carregando projeto...
+            </h1>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  if (isMissing) {
     return (
       <div className="page-shell">
         <main className="section-shell grid min-h-screen place-items-center py-10">
@@ -76,7 +138,7 @@ export default function ProjectDetails() {
               Projeto não encontrado
             </h1>
             <p className="mt-3 text-slate-400">
-              Esse registro não existe mais no localStorage deste navegador.
+              Esse registro não está disponível na base de projetos.
             </p>
             <Link to="/admin" className="primary-button mt-6">
               Voltar
@@ -111,7 +173,7 @@ export default function ProjectDetails() {
               type="button"
               className="ghost-button"
               onClick={() => setIsEditing(true)}
-              disabled={isEditing}
+              disabled={isEditing || isSaving || isDeleting}
             >
               <Edit3 className="h-4 w-4" />
               Editar
@@ -120,7 +182,7 @@ export default function ProjectDetails() {
               type="button"
               className="primary-button"
               onClick={handleSave}
-              disabled={!isEditing}
+              disabled={!isEditing || isSaving || isDeleting}
             >
               <Save className="h-4 w-4" />
               Salvar
@@ -130,6 +192,7 @@ export default function ProjectDetails() {
                 type="button"
                 className="danger-button"
                 onClick={() => setDeleteDialogOpen(true)}
+                disabled={isSaving || isDeleting}
               >
                 <Trash2 className="h-4 w-4" />
                 Excluir projeto
@@ -153,7 +216,7 @@ export default function ProjectDetails() {
       <ConfirmDialog
         open={deleteDialogOpen}
         title="Excluir projeto?"
-        message="Essa ação remove o projeto do localStorage deste navegador. Exporte um backup antes se quiser guardar uma cópia."
+        message="Essa ação remove o projeto da base de projetos. Exporte um backup antes se quiser guardar uma cópia."
         confirmLabel="Excluir projeto"
         destructive
         onCancel={() => setDeleteDialogOpen(false)}

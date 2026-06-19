@@ -1,15 +1,29 @@
-export const ADMIN_SESSION_KEY = 'lvsolutions_admin_session'
+import { supabase } from './supabase'
 
-export function isAdminSessionActive() {
-  return sessionStorage.getItem(ADMIN_SESSION_KEY) === 'active'
+export async function isAdminSessionActive() {
+  if (!supabase) {
+    return false
+  }
+
+  const { data, error } = await supabase.auth.getSession()
+
+  if (error) {
+    console.warn('Nao foi possivel verificar a sessao do Supabase.', error)
+
+    return false
+  }
+
+  return Boolean(data.session)
 }
 
-export function startAdminSession() {
-  // Login fixo e localStorage são apenas para protótipo. Para produção, migrar para Supabase Auth e banco com criptografia.
-  // TODO: substituir login fixo por Supabase Auth antes de usar em produção.
-  sessionStorage.setItem(ADMIN_SESSION_KEY, 'active')
-}
+export async function clearAdminSession() {
+  if (!supabase) {
+    return
+  }
 
-export function clearAdminSession() {
-  sessionStorage.removeItem(ADMIN_SESSION_KEY)
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    throw error
+  }
 }

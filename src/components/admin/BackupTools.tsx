@@ -14,8 +14,10 @@ type BackupToolsProps = {
 export default function BackupTools({ onImported }: BackupToolsProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  function exportBackup() {
-    const blob = new Blob([exportProjectsJson()], { type: 'application/json' })
+  async function exportBackup() {
+    const blob = new Blob([await exportProjectsJson()], {
+      type: 'application/json',
+    })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     const today = new Date().toISOString().slice(0, 10)
@@ -46,14 +48,22 @@ export default function BackupTools({ onImported }: BackupToolsProps) {
     const normalizedProjects = parsed.map((project) =>
       normalizeProject(project as Partial<Project>),
     )
-    replaceProjects(normalizedProjects)
+    await replaceProjects(normalizedProjects)
     onImported(normalizedProjects)
     window.alert('Backup importado com sucesso.')
   }
 
   return (
     <div className="flex flex-wrap gap-2">
-      <button type="button" className="ghost-button" onClick={exportBackup}>
+      <button
+        type="button"
+        className="ghost-button"
+        onClick={() => {
+          exportBackup().catch(() => {
+            window.alert('NÃ£o foi possÃ­vel exportar o backup JSON.')
+          })
+        }}
+      >
         <Download className="h-4 w-4" />
         Exportar backup JSON
       </button>

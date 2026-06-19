@@ -1,5 +1,5 @@
 import { FolderKanban } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AdminTopbar from '../components/admin/AdminTopbar'
 import ProjectCard from '../components/admin/ProjectCard'
@@ -10,8 +10,33 @@ import { PROJECT_STATUS_LABELS } from '../types/project'
 
 export default function AdminProjects() {
   const navigate = useNavigate()
-  const [projects, setProjects] = useState<Project[]>(() => getProjects())
+  const [projects, setProjects] = useState<Project[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    let isMounted = true
+
+    async function loadProjects() {
+      const loadedProjects = await getProjects()
+
+      if (isMounted) {
+        setProjects(loadedProjects)
+        setIsLoading(false)
+      }
+    }
+
+    loadProjects().catch(() => {
+      if (isMounted) {
+        setProjects([])
+        setIsLoading(false)
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const filteredProjects = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -35,9 +60,12 @@ export default function AdminProjects() {
     })
   }, [projects, query])
 
-  function logout() {
-    clearAdminSession()
-    navigate('/login')
+  async function logout() {
+    try {
+      await clearAdminSession()
+    } finally {
+      navigate('/login')
+    }
   }
 
   return (
@@ -50,7 +78,13 @@ export default function AdminProjects() {
         onImported={setProjects}
       />
       <main className="section-shell py-8">
-        {projects.length === 0 ? (
+        {isLoading ? (
+          <div className="glass-panel rounded-lg p-8 text-center">
+            <h2 className="text-xl font-bold text-white">
+              Carregando projetos...
+            </h2>
+          </div>
+        ) : projects.length === 0 ? (
           <div className="glass-panel rounded-lg p-8 text-center">
             <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-lg border border-cyan-300/25 bg-cyan-300/10 text-cyan-100">
               <FolderKanban className="h-6 w-6" />
