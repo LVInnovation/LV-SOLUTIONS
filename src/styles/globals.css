@@ -76,23 +76,23 @@ a {
   }
 
   .primary-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-cyan-300/40 bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/25 transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-cyan-300/45 bg-[#15803d] px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:border-cyan-200/70 hover:bg-[#166534] hover:text-white active:border-cyan-100 active:bg-[#14532d] active:text-white focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:ring-offset-2 focus:ring-offset-slate-950 focus-visible:text-white disabled:border-slate-600 disabled:bg-slate-800 disabled:text-slate-300 disabled:shadow-none disabled:opacity-80 disabled:hover:border-slate-600 disabled:hover:bg-slate-800 disabled:hover:text-slate-300;
   }
 
   .secondary-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-fuchsia-300/35 bg-fuchsia-400/10 px-4 py-2.5 text-sm font-semibold text-fuchsia-100 transition hover:border-fuchsia-200 hover:bg-fuchsia-400/18 focus:outline-none focus:ring-2 focus:ring-fuchsia-200 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-cyan-300/40 bg-slate-950/85 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-cyan-500/10 transition hover:border-cyan-200/70 hover:bg-slate-900 hover:text-white active:border-cyan-100 active:bg-slate-800 active:text-white focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:border-slate-600 disabled:bg-slate-800/70 disabled:text-slate-300 disabled:shadow-none disabled:opacity-80 disabled:hover:border-slate-600 disabled:hover:bg-slate-800/70 disabled:hover:text-slate-300;
   }
 
   .ghost-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-200/40 hover:bg-white/[0.08] focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.035] px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-cyan-200/40 hover:bg-white/[0.08] hover:text-white active:border-cyan-100/55 active:bg-cyan-300/12 active:text-white focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:border-slate-700 disabled:bg-slate-900/55 disabled:text-slate-400 disabled:opacity-70 disabled:hover:border-slate-700 disabled:hover:bg-slate-900/55 disabled:hover:text-slate-400;
   }
 
   .danger-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-md border border-rose-400/45 bg-rose-500/12 px-4 py-2.5 text-sm font-semibold text-rose-100 transition hover:bg-rose-500/20 focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-rose-400/45 bg-rose-500/12 px-4 py-2.5 text-sm font-semibold text-rose-100 transition hover:border-rose-200 hover:bg-rose-500/20 hover:text-white active:border-rose-100 active:bg-rose-500/30 active:text-white focus:outline-none focus:ring-2 focus:ring-rose-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:border-slate-700 disabled:bg-slate-900/55 disabled:text-slate-400 disabled:opacity-70 disabled:hover:border-slate-700 disabled:hover:bg-slate-900/55 disabled:hover:text-slate-400;
   }
 
   .icon-button {
-    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-slate-100 transition hover:border-cyan-200/40 hover:bg-white/[0.09] focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950;
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-slate-100 transition hover:border-cyan-200/40 hover:bg-white/[0.09] hover:text-white active:border-cyan-100/55 active:bg-cyan-300/12 active:text-white focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:border-slate-700 disabled:bg-slate-900/55 disabled:text-slate-400 disabled:opacity-70 disabled:hover:border-slate-700 disabled:hover:bg-slate-900/55 disabled:hover:text-slate-400;
   }
 
   .field-label {
