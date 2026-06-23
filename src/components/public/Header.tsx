@@ -28,7 +28,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <Link to="/login" className="ghost-button px-3 py-2">
-            Login
+            Área Restrita
           </Link>
         </div>
       </div>

@@ -104,7 +104,7 @@ export default function Login() {
           </div>
           <h1 className="text-2xl font-bold text-white">Login privado</h1>
           <p className="mt-2 text-sm text-slate-400">
-            Acesse o controle de projetos da L&V Solutions.
+            Área restrita dos projetos da L&V Solutions.
           </p>
         </div>
         <form className="space-y-4" onSubmit={handleSubmit}>
