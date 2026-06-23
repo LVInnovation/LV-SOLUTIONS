@@ -39,7 +39,7 @@ export default function IdeasSection() {
             <Sparkles className="h-5 w-5" />
           </div>
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
-            Ideias que podem ser desenvolvidas
+            Ideias de projetos
           </h2>
           <p className="mt-4 text-slate-300">
             Soluções que podem ser criadas e adaptadas para diferentes tipos de

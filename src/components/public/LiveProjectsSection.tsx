@@ -18,11 +18,10 @@ export default function LiveProjectsSection({
               <Rocket className="h-5 w-5" />
             </div>
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
-              Ideias já em funcionamento
+              Projetos fechados
             </h2>
             <p className="mt-4 text-slate-300">
-              Projetos cadastrados na área privada e liberados para aparecer no
-              portfólio público.
+              Portfólio público para demosntrar soluções digitais que já estão em operação.
             </p>
           </div>
         </div>

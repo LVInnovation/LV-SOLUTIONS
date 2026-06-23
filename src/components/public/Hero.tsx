@@ -24,10 +24,10 @@ export default function Hero() {
         <div className="max-w-3xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1.5 text-sm font-medium text-cyan-100 shadow-lg shadow-cyan-500/10">
             <Sparkles className="h-4 w-4" />
-            Tech premium para operações reais
+            App's facilitadores de processos e operações para empresas e profissionais autônomos
           </div>
           <h1 className="max-w-3xl text-4xl font-black leading-tight text-white sm:text-5xl lg:text-7xl">
-            Sistemas personalizados para transformar sua operação
+            Sistemas personalizados para facilitar sua operação
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
             Desenvolvimento de soluções digitais sob medida para empresas,
