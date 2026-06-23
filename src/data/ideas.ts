@@ -10,5 +10,5 @@ export const ideas = [
   'Sistema para assistência técnica',
   'Aplicativo sob medida',
   'Sistema administrativo',
-  'Portal para clientes',
+  'Agentes de IA  ',
 ]
